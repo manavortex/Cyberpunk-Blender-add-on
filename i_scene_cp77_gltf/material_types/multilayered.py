@@ -176,13 +176,14 @@ class Multilayered:
     def createLayerMaterial(self,LayerName,LayerCount,CurMat,mlmaskpath,normalimgpath):
         NG = _getOrCreateLayerBlend()
         for x in range(LayerCount-1):
-            if os.path.exists((os.path.splitext(self.ProjPath + mlmaskpath)[0]+'_layers\\'+mlmaskpath.split('\\')[-1:][0][:-7]+"_"+str(x+1)+".png").replace('\\',os.sep)):
-                MaskTexture = imageFromPath(os.path.splitext(self.ProjPath+ mlmaskpath)[0]+'_layers\\'+mlmaskpath.split('\\')[-1:][0][:-7]+"_"+str(x+1)+".png",self.image_format,isNormal = True)
-            elif os.path.exists((os.path.splitext(self.BasePath + mlmaskpath)[0]+'_layers\\'+mlmaskpath.split('\\')[-1:][0][:-7]+"_"+str(x+1)+".png").replace('\\',os.sep)):
-                MaskTexture = imageFromPath((os.path.splitext(self.BasePath + mlmaskpath)[0]+'_layers\\'+mlmaskpath.split('\\')[-1:][0][:-7]+"_"+str(x+1)+".png").replace('\\',os.sep),self.image_format,isNormal = True)
+            mlmask_path_1 = (os.path.splitext(self.ProjPath + mlmaskpath)[0]+'_layers\\'+mlmaskpath.split('\\')[-1:][0][:-7]+"_"+str(x+1)+".png").replace('\\',os.sep)
+            mlmask_path_2 = (os.path.splitext(self.BasePath + mlmaskpath)[0]+'_layers\\'+mlmaskpath.split('\\')[-1:][0][:-7]+"_"+str(x+1)+".png").replace('\\',os.sep)
+            if os.path.exists(mlmask_path_1):
+                MaskTexture = imageFromPath(mlmask_path_1,self.image_format,isNormal = True)
+            elif os.path.exists(mlmask_path_2):
+                MaskTexture = imageFromPath(mlmask_path_2,self.image_format,isNormal = True)
             else:
-                MaskTexture = ""
-                print('Mask image not found for layer ',x+1)
+                MaskTexture = imageFromPath(f"{self.BasePath}\\engine\\textures\\editor\\black.png".replace('\\',os.sep), self.image_format,isNormal = True)
 
 
 
