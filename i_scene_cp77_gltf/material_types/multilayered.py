@@ -181,6 +181,7 @@ class Multilayered:
             elif os.path.exists((os.path.splitext(self.BasePath + mlmaskpath)[0]+'_layers\\'+mlmaskpath.split('\\')[-1:][0][:-7]+"_"+str(x+1)+".png").replace('\\',os.sep)):
                 MaskTexture = imageFromPath((os.path.splitext(self.BasePath + mlmaskpath)[0]+'_layers\\'+mlmaskpath.split('\\')[-1:][0][:-7]+"_"+str(x+1)+".png").replace('\\',os.sep),self.image_format,isNormal = True)
             else:
+                MaskTexture = ""
                 print('Mask image not found for layer ',x+1)
 
 
@@ -221,7 +222,7 @@ class Multilayered:
         else:
             targetLayer="Mat_Mod_Layer_0"
 
-        
+
 
         # If theres more than 10 layers, mix them in 2 stacks then mix the stacks, trying to avoid SVM errors
         if LayerCount>11:
@@ -245,12 +246,12 @@ class Multilayered:
             CurMat.links.new(CurMat.nodes[LastLayer].outputs[3],MixLayerStacks.inputs[7])
             factor=CreateShaderNodeValue(CurMat, 0.5, -1100,-250, "Factor")
             CurMat.links.new(factor.outputs[0],MixLayerStacks.inputs[8])
-                        
+
             # replace the connections from the bottom of the stack with these
             CurMat.links.new(MixLayerStacks.outputs[0],CurMat.nodes[loc('Principled BSDF')].inputs['Base Color'])
             #CurMat.links.new(CurMat.nodes[targetLayer].outputs[0],CurMat.nodes[loc('Principled BSDF')].inputs['Base Color'])
             CurMat.links.new(MixLayerStacks.outputs[1],CurMat.nodes[loc('Principled BSDF')].inputs['Metallic'])
-            CurMat.links.new(MixLayerStacks.outputs[2],CurMat.nodes[loc('Principled BSDF')].inputs['Roughness'])            
+            CurMat.links.new(MixLayerStacks.outputs[2],CurMat.nodes[loc('Principled BSDF')].inputs['Roughness'])
             targetLayer="MixLayerStacks"
         else:
             CurMat.links.new(CurMat.nodes[targetLayer].outputs[0],CurMat.nodes[loc('Principled BSDF')].inputs['Base Color'])
